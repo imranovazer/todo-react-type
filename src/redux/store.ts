@@ -4,7 +4,7 @@ import TodosReducer from "./TodosReducer";
 
 const store = configureStore({
     reducer: {
-        Todos : TodosReducer
+        todos : TodosReducer
     }
 })
 export default store;

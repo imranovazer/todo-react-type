@@ -1,7 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { TodosType } from '../types/Types';
 
-const initialState: TodosType[] = [];
+const initialState: TodosType[] = [
+  {
+    id: 1,
+    text: "Go to home",
+    isCompleted : false 
+  } ,
+   {
+    id: 2,
+    text: "Go to market",
+    isCompleted : true 
+  }
+];
 
 const TodosSlice = createSlice({
   name: "Todos",
@@ -11,26 +22,22 @@ const TodosSlice = createSlice({
       state.push(action.payload);
     },
     removeTodo: (state, action) => {
-      state = state.filter((todo: TodosType) => todo.id !== action.payload);
-      },
-      MakeDone: (state, action) =>
-      {
-          const newArray = state.map(e =>
-          {
-              if (e.id === action.payload)
-              {
-                  return { ...e, isCompleted: !e.isCompleted };
-              }
-              else
-              {
-                  return e
-              }
-              state = newArray;
-              
-            })
-        }
+      return state.filter((todo: TodosType) => todo.id !== action.payload);
+    },
+    makeDone: (state, action) => {
+      return state.map((todo) =>
+        todo.id === action.payload ? { ...todo, isCompleted: !todo.isCompleted } : todo
+      );
+       
+    },
+    clearCompleted: (state) => {
+      return state.filter(e =>{
+        return e.isCompleted !== true;
+      })
+       }
+      
   },
 });
 
-export const { addToDo, removeTodo,MakeDone } = TodosSlice.actions;
+export const { addToDo, removeTodo,makeDone ,clearCompleted } = TodosSlice.actions;
 export default TodosSlice.reducer;
