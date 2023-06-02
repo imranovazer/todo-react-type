@@ -3,7 +3,8 @@ import { Container, Input ,Card,CardHeader,CardBody,CardTitle,CardText,Button,Ca
 
 import { useSelector, useDispatch } from "react-redux";
 import { TodosType } from "./types/Types";
-import { addToDo, clearCompleted, makeDone } from "./redux/TodosReducer";
+import { addToDo, clearCompleted, fetchTodos, makeDone } from "./redux/TodosReducer";
+import store from "./redux/store";
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
  const data = useSelector((state: any) => state.todos);
   const dispatch = useDispatch();
 
-  const [dataToDisplay ,setDataToDisplay] =useState(data)
+  const [dataToDisplay ,setDataToDisplay] =useState([])
 
   const [todoToAdd, setTodoToAdd] = useState<TodosType>({
     id: 0,
@@ -44,7 +45,15 @@ function App() {
   {
     displayAll()
 
-  } , [data])
+
+  }, [data])
+
+   useEffect(() =>
+   {
+     store.dispatch(fetchTodos());
+   }, [])
+  
+ 
   const handleOnChange = (e:any) =>
   {
     const newtodoToAdd = { ...todoToAdd, text: e };

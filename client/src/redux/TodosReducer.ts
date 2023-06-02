@@ -1,18 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { TodosType } from '../types/Types';
+import { createSlice ,createAsyncThunk } from '@reduxjs/toolkit';
+import { TodosType } from '../types/Types'; 
+import axios from 'axios';
 
 const initialState: TodosType[] = [
-  {
-    id: 1,
-    text: "Go to home",
-    isCompleted : false 
-  } ,
-   {
-    id: 2,
-    text: "Go to market",
-    isCompleted : true 
-  }
+  // {
+  //   id: 1,
+  //   text: "Go to home",
+  //   isCompleted : false
+  // }
+  
 ];
+export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
+  const response = await axios.get('http://127.0.0.1:3001/api/todos');
+
+  return response.data.data;
+});
 
 const TodosSlice = createSlice({
   name: "Todos",
@@ -37,7 +39,14 @@ const TodosSlice = createSlice({
        }
       
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchTodos.fulfilled, (state, action) => {
+      return action.payload;
+    });
+  },
 });
+
+
 
 export const { addToDo, removeTodo,makeDone ,clearCompleted } = TodosSlice.actions;
 export default TodosSlice.reducer;
